@@ -4,7 +4,7 @@ import by.smirnov.newsproject.domain.News;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
-public interface NewRepository extends
+public interface NewsRepository extends
         CrudRepository<News, Long>,
         JpaRepository<News, Long> {
 }
