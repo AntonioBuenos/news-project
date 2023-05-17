@@ -1,6 +1,7 @@
 package by.smirnov.newsproject.service;
 
 import by.smirnov.newsproject.domain.Comment;
+import by.smirnov.newsproject.exception.NoSuchEntityException;
 import by.smirnov.newsproject.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -19,8 +20,7 @@ public class CommentServiceImpl implements CommentService {
     public Comment findById(Long id) {
         return repository
                 .findById(id)
-                .orElse(null);
-        /*                .orElseThrow(NoSuchEntityException::new);*/
+                .orElseThrow(NoSuchEntityException::new);
     }
 
     @Override
@@ -45,8 +45,7 @@ public class CommentServiceImpl implements CommentService {
     public Comment delete(Long id) {
         Comment toBeDeleted = repository
                 .findById(id)
-                .orElse(null);
-        /*                .orElseThrow(NoSuchEntityException::new);*/
+                .orElseThrow(NoSuchEntityException::new);
         return repository.save(toBeDeleted);
     }
 
