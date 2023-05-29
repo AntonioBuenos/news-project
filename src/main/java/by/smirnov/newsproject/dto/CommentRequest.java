@@ -10,9 +10,8 @@ import java.sql.Timestamp;
 @Setter
 public class CommentRequest {
 
-    private long id;
     private Timestamp time;
     private String text;
     private String username;
-    private News newsItem;
+
 }
