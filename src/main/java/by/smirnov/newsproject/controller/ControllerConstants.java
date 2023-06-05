@@ -10,9 +10,9 @@ public interface ControllerConstants {
 
     String ID = "id";
 
-    String TAGS = "news";
+    String NEWS = "news";
 
-    String CERTIFICATES = "commentaries";
+    String COMMENTARIES = "commentaries";
 
     String DELETED = "Object by this ID successfully deleted";
 }

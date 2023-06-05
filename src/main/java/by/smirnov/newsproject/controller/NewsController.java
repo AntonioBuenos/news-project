@@ -1,13 +1,17 @@
 package by.smirnov.newsproject.controller;
 
 import by.smirnov.newsproject.domain.News;
+import by.smirnov.newsproject.dto.NewsConverter;
 import by.smirnov.newsproject.dto.NewsRequest;
 import by.smirnov.newsproject.dto.NewsResponse;
 import by.smirnov.newsproject.exception.BadRequestException;
 import by.smirnov.newsproject.exception.NoSuchEntityException;
 import by.smirnov.newsproject.service.NewsService;
+import by.smirnov.newsproject.validation.ValidationErrorConverter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -25,11 +29,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static by.smirnov.newsproject.controller.CommonControllerConstants.PAGE_SIZE;
+import static by.smirnov.newsproject.controller.CommonControllerConstants.PAGE_SORT;
 import static by.smirnov.newsproject.controller.ControllerConstants.DELETED;
 import static by.smirnov.newsproject.controller.ControllerConstants.ID;
 import static by.smirnov.newsproject.controller.ControllerConstants.MAPPING_ID;
 import static by.smirnov.newsproject.controller.ControllerConstants.MAPPING_NEWS;
-import static javax.print.attribute.standard.ReferenceUriSchemesSupported.NEWS;
+import static by.smirnov.newsproject.controller.ControllerConstants.NEWS;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,8 +47,9 @@ public class NewsController {
     private final NewsConverter converter;
 
     @GetMapping
-    public ResponseEntity<Map<String, List<NewsResponse>>> index() {
-        List<NewsResponse> responses = service.findAll()
+    public ResponseEntity<Map<String, List<NewsResponse>>> index(@PageableDefault(sort = PAGE_SORT, size = PAGE_SIZE)
+                                                                     Pageable pageable) {
+        List<NewsResponse> responses = service.findAll(pageable)
                 .stream()
                 .map(converter::convert)
                 .toList();
