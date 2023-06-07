@@ -1,0 +1,103 @@
+package by.smirnov.newsproject.controller;
+
+import by.smirnov.newsproject.domain.Comment;
+import by.smirnov.newsproject.dto.CommentConverter;
+import by.smirnov.newsproject.dto.CommentRequest;
+import by.smirnov.newsproject.dto.CommentResponse;
+import by.smirnov.newsproject.exception.BadRequestException;
+import by.smirnov.newsproject.exception.NoSuchEntityException;
+import by.smirnov.newsproject.service.CommentService;
+import by.smirnov.newsproject.validation.ValidationErrorConverter;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import static by.smirnov.newsproject.controller.CommonControllerConstants.PAGE_SIZE;
+import static by.smirnov.newsproject.controller.CommonControllerConstants.PAGE_SORT;
+import static by.smirnov.newsproject.controller.ControllerConstants.DELETED;
+import static by.smirnov.newsproject.controller.ControllerConstants.ID;
+import static by.smirnov.newsproject.controller.ControllerConstants.MAPPING_COMMENTARIES;
+import static by.smirnov.newsproject.controller.ControllerConstants.MAPPING_ID;
+import static by.smirnov.newsproject.controller.ControllerConstants.NEWS;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping(MAPPING_COMMENTARIES)
+public class CommentController {
+
+    private final CommentService service;
+
+    private final CommentConverter converter;
+
+    @GetMapping
+    public ResponseEntity<Map<String, List<CommentResponse>>> index(@PageableDefault(sort = PAGE_SORT, size = PAGE_SIZE)
+                                                                 Pageable pageable) {
+        List<CommentResponse> responses = service.findAll(pageable)
+                .stream()
+                .map(converter::convert)
+                .toList();
+        return new ResponseEntity<>(Collections.singletonMap(NEWS, responses), HttpStatus.OK);
+    }
+
+    @GetMapping(MAPPING_ID)
+    public ResponseEntity<CommentResponse> show(@PathVariable(ID) long id) {
+
+        Comment tag = service.findById(id);
+        CommentResponse response = converter.convert(tag);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<CommentResponse> create(@RequestBody @Valid CommentRequest request,
+                                               BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            throw new BadRequestException(ValidationErrorConverter.getErrors(bindingResult).toString());
+        }
+
+        Comment tag = converter.convert(request);
+        Comment created = service.create(tag);
+        CommentResponse response = converter.convert(created);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PutMapping(MAPPING_ID)
+    public ResponseEntity<CommentResponse> update(@PathVariable(name = ID) Long id,
+                                               @RequestBody @Valid CommentRequest request,
+                                               BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            throw new BadRequestException(ValidationErrorConverter.getErrors(bindingResult).toString());
+        }
+
+        Comment tag = converter.convert(request);
+        Comment changed = service.update(tag);
+        CommentResponse response = converter.convert(changed);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping(MAPPING_ID)
+    public ResponseEntity<Map<String, Long>> delete(@PathVariable(ID) long id) {
+
+        if (Objects.isNull(service.findById(id))) throw new NoSuchEntityException();
+        service.delete(id);
+        return new ResponseEntity<>(Map.of(DELETED, id), HttpStatus.OK);
+    }
+}
