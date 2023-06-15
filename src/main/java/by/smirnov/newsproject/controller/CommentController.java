@@ -8,6 +8,7 @@ import by.smirnov.newsproject.exception.BadRequestException;
 import by.smirnov.newsproject.exception.NoSuchEntityException;
 import by.smirnov.newsproject.service.CommentService;
 import by.smirnov.newsproject.validation.ValidationErrorConverter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +42,11 @@ import static by.smirnov.newsproject.controller.ControllerConstants.NEWS;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(MAPPING_COMMENTARIES)
+@Validated
+@Tag(
+        name = "Comment controller",
+        description = "This controller is responsible for the CRUD operations with news commentaries"
+)
 public class CommentController {
 
     private final CommentService service;
