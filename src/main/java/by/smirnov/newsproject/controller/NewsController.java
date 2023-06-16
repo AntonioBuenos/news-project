@@ -8,6 +8,7 @@ import by.smirnov.newsproject.exception.BadRequestException;
 import by.smirnov.newsproject.exception.NoSuchEntityException;
 import by.smirnov.newsproject.service.NewsService;
 import by.smirnov.newsproject.validation.ValidationErrorConverter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +41,10 @@ import static by.smirnov.newsproject.controller.ControllerConstants.NEWS;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(MAPPING_NEWS)
+@Tag(
+        name = "News controller",
+        description = "This controller is responsible for the CRUD operations with news"
+)
 public class NewsController {
 
     private final NewsService service;
