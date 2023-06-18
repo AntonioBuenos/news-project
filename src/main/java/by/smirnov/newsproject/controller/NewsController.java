@@ -5,9 +5,15 @@ import by.smirnov.newsproject.dto.NewsConverter;
 import by.smirnov.newsproject.dto.NewsRequest;
 import by.smirnov.newsproject.dto.NewsResponse;
 import by.smirnov.newsproject.exception.BadRequestException;
+import by.smirnov.newsproject.exception.ErrorContainer;
 import by.smirnov.newsproject.exception.NoSuchEntityException;
 import by.smirnov.newsproject.service.NewsService;
 import by.smirnov.newsproject.validation.ValidationErrorConverter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -61,6 +67,22 @@ public class NewsController {
         return new ResponseEntity<>(Collections.singletonMap(NEWS, responses), HttpStatus.OK);
     }
 
+    @Operation(
+            method = "GET",
+            summary = "Finding a news unit by ID",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful Request"),
+                    @ApiResponse(responseCode = "400", description = "Bad Request. " +
+                            "All page numbers must be integers, separated by comas", content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorContainer.class)))
+                    }),
+                    @ApiResponse(responseCode = "500", description = "Unexpected Internal Server Error", content =
+                    @Content)
+            },
+            description = "This method gets news unit by id"
+    )
     @GetMapping(MAPPING_ID)
     public ResponseEntity<NewsResponse> show(@PathVariable(ID) long id) {
 
