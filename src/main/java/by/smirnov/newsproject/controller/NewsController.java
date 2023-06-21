@@ -70,7 +70,7 @@ public class NewsController {
                     @ApiResponse(responseCode = "500", description = "Unexpected Internal Server Error", content =
                     @Content)
             },
-            description = "This method gets news unit by id"
+            description = "This method gets list of all news"
     )
     @GetMapping
     public ResponseEntity<Map<String, List<NewsResponse>>> index(@PageableDefault(sort = PAGE_SORT, size = PAGE_SIZE)

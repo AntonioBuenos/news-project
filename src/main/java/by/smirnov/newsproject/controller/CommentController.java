@@ -59,6 +59,21 @@ public class CommentController {
 
     private final CommentConverter converter;
 
+    @Operation(
+            method = "GET",
+            summary = "Returns a list of all comments",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful Request"),
+                    @ApiResponse(responseCode = "400", description = "Bad Request. ", content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorContainer.class)))
+                    }),
+                    @ApiResponse(responseCode = "500", description = "Unexpected Internal Server Error", content =
+                    @Content)
+            },
+            description = "This method gets list of all comments"
+    )
     @GetMapping
     public ResponseEntity<Map<String, List<CommentResponse>>> index(@PageableDefault(sort = PAGE_SORT, size = PAGE_SIZE)
                                                                  Pageable pageable) {
