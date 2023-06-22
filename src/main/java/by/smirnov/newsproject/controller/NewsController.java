@@ -105,6 +105,21 @@ public class NewsController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(
+            method = "GET",
+            summary = "Creates a news unit",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Entity created"),
+                    @ApiResponse(responseCode = "400", description = "Bad Request. ", content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorContainer.class)))
+                    }),
+                    @ApiResponse(responseCode = "500", description = "Unexpected Internal Server Error", content =
+                    @Content)
+            },
+            description = "This method creates a news unit"
+    )
     @PostMapping
     public ResponseEntity<NewsResponse> create(@RequestBody @Valid NewsRequest request,
                                               BindingResult bindingResult) {
