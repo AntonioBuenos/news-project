@@ -108,6 +108,21 @@ public class CommentController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(
+            method = "GET",
+            summary = "Creates a new comment",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Entity created"),
+                    @ApiResponse(responseCode = "400", description = "Bad Request. ", content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorContainer.class)))
+                    }),
+                    @ApiResponse(responseCode = "500", description = "Unexpected Internal Server Error", content =
+                    @Content)
+            },
+            description = "This method creates a new comment"
+    )
     @PostMapping
     public ResponseEntity<CommentResponse> create(@RequestBody @Valid CommentRequest request,
                                                BindingResult bindingResult) {
