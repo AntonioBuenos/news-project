@@ -109,7 +109,7 @@ public class CommentController {
     }
 
     @Operation(
-            method = "GET",
+            method = "POST",
             summary = "Creates a new comment",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Entity created"),

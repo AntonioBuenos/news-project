@@ -106,7 +106,7 @@ public class NewsController {
     }
 
     @Operation(
-            method = "GET",
+            method = "POST",
             summary = "Creates a news unit",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Entity created"),
