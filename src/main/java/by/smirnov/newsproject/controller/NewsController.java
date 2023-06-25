@@ -134,6 +134,21 @@ public class NewsController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @Operation(
+            method = "PUT",
+            summary = "Changes a news unit",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Entity created"),
+                    @ApiResponse(responseCode = "400", description = "Bad Request. ", content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorContainer.class)))
+                    }),
+                    @ApiResponse(responseCode = "500", description = "Unexpected Internal Server Error", content =
+                    @Content)
+            },
+            description = "This method changes a news unit"
+    )
     @PutMapping(MAPPING_ID)
     public ResponseEntity<NewsResponse> update(@PathVariable(name = ID) Long id,
                                               @RequestBody @Valid NewsRequest request,
