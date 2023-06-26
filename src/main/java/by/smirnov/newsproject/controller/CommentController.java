@@ -137,6 +137,21 @@ public class CommentController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @Operation(
+            method = "PUT",
+            summary = "Changes a commentary",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Entity created"),
+                    @ApiResponse(responseCode = "400", description = "Bad Request. ", content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorContainer.class)))
+                    }),
+                    @ApiResponse(responseCode = "500", description = "Unexpected Internal Server Error", content =
+                    @Content)
+            },
+            description = "This method changes a commentary"
+    )
     @PutMapping(MAPPING_ID)
     public ResponseEntity<CommentResponse> update(@PathVariable(name = ID) Long id,
                                                @RequestBody @Valid CommentRequest request,
