@@ -141,7 +141,7 @@ public class CommentController {
             method = "PUT",
             summary = "Changes a commentary",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Entity created"),
+                    @ApiResponse(responseCode = "200", description = "Entity changed"),
                     @ApiResponse(responseCode = "400", description = "Bad Request. ", content = {
                             @Content(
                                     mediaType = "application/json",
@@ -167,6 +167,21 @@ public class CommentController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(
+            method = "PUT",
+            summary = "Deletes a commentary",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Entity deleted"),
+                    @ApiResponse(responseCode = "400", description = "Bad Request. ", content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorContainer.class)))
+                    }),
+                    @ApiResponse(responseCode = "500", description = "Unexpected Internal Server Error", content =
+                    @Content)
+            },
+            description = "This method deletes a commentary"
+    )
     @DeleteMapping(MAPPING_ID)
     public ResponseEntity<Map<String, Long>> delete(@PathVariable(ID) long id) {
 
