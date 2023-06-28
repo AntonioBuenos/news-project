@@ -168,7 +168,7 @@ public class CommentController {
     }
 
     @Operation(
-            method = "PUT",
+            method = "DELETE",
             summary = "Deletes a commentary",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Entity deleted"),
