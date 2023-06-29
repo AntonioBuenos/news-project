@@ -164,6 +164,21 @@ public class NewsController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(
+            method = "DELETE",
+            summary = "Deletes a news unit",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Entity deleted"),
+                    @ApiResponse(responseCode = "400", description = "Bad Request. ", content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorContainer.class)))
+                    }),
+                    @ApiResponse(responseCode = "500", description = "Unexpected Internal Server Error", content =
+                    @Content)
+            },
+            description = "This method deletes a news unit"
+    )
     @DeleteMapping(MAPPING_ID)
     public ResponseEntity<Map<String, Long>> delete(@PathVariable(ID) long id) {
 
